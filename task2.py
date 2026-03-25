@@ -1,26 +1,16 @@
-def get_cats_info(path):
-    try:
-        with open(path, encoding="utf-8") as f:
-            cats = []
-            for line in f:
-                if line.strip():
-                    cat_id, name, age = line.strip().split(",")
-                    cats.append({"id": cat_id, "name": name, "age": age})
-        return cats
-
-    except FileNotFoundError:
-        print(f"Помилка: файл '{path}' не знайдено")
-        return []
-    except Exception as e:
-        print(f"Помилка: {e}")
-        return []
+import re
+from typing import Callable
 
 
-def run():
-    cats = get_cats_info("task2_cats.txt")
-    if cats:
-        print(cats)
+def generator_numbers(text: str):
+    for match in re.finditer(r'(?<= )\d+\.\d+(?= )', text):
+        yield float(match.group())
 
 
-if __name__ == "__main__":
-    run()
+def sum_profit(text: str, func: Callable):
+    return sum(func(text))
+
+
+text = "Загальний дохід працівника складається з декількох частин: 1000.01 як основний дохід, доповнений додатковими надходженнями 27.45 і 324.00 доларів."
+total_income = sum_profit(text, generator_numbers)
+print(f"Загальний дохід: {total_income}")

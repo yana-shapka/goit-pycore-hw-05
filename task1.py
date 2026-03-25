@@ -1,24 +1,21 @@
-def total_salary(path):
-    try:
-        with open(path, encoding="utf-8") as f:
-            salaries = [int(line.split(",")[1]) for line in f if line.strip()]
-        
-        total = sum(salaries)
-        average = total // len(salaries)
-        return total, average
+def caching_fibonacci():
+    cache = {}
 
-    except FileNotFoundError:
-        print(f"Помилка: файл '{path}' не знайдено")
-        return None, None
-    except Exception as e:
-        print(f"Помилка: {e}")
-        return None, None
+    def fibonacci(n):
+        if n <= 0:
+            return 0
+        if n == 1:
+            return 1
+        if n in cache:
+            return cache[n]
+
+        cache[n] = fibonacci(n - 1) + fibonacci(n - 2)
+        return cache[n]
+
+    return fibonacci
 
 
-def run():
-    total, average = total_salary("task1_salary.txt")
-    if total is not None:
-        print(f"Загальна сума заробітної плати: {total}, Середня заробітна плата: {average}")
+fib = caching_fibonacci()
 
-if __name__ == "__main__":
-    run()
+print(fib(10))  # 55
+print(fib(15))  # 610
